@@ -1,10 +1,11 @@
 
-# 🌐 Personal Portfolio Website
+<h1 align="center">🌐 Personal Portfolio Website</h1>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Sanskrutipatil21/Personal-Portfolio-/main/github-readme-banner-1280x640.png" width="100%" alt="Portfolio Banner">
 </p>
 ---
+
 ## 📖 Overview
 
 This repository contains the source code for my personal portfolio website, designed to showcase my technical skills, projects, certifications, internship experience, and professional journey as a Computer Science Engineering student specializing in Data Analytics, Artificial Intelligence, and Full-Stack Development.
