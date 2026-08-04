@@ -216,6 +216,54 @@ a {
   background: linear-gradient(90deg, #2cb5ff, #5b84ff);
 }
 
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(86, 163, 255, 0.22);
+  background: rgba(13, 26, 45, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+  padding: 0;
+  flex: 0 0 auto;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.nav-toggle:hover {
+  border-color: rgba(86, 163, 255, 0.45);
+}
+
+.nav-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4);
+}
+
+.nav-toggle-bar {
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4ab8ff, #8d5cff);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-wrap.nav-open .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-wrap.nav-open .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-wrap.nav-open .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 .resume-btn {
   display: inline-flex;
   align-items: center;
@@ -962,6 +1010,7 @@ h1 span.surname {
 
   .experience-card {
     margin-top: 24px;
+    margin-left: 0;
   }
 }
 
@@ -1935,31 +1984,89 @@ h1 span.surname {
     justify-self: end;
   }
 
+  .stat-card:nth-child(1),
+  .stat-card:nth-child(3) {
+    margin-left: 0;
+  }
+
   .stat-card:nth-child(2) {
     margin-left: 112px;
+  }
+
+  .experience-section {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .experience-header {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .experience-grid {
+    grid-column: 1;
+    grid-row: 2;
   }
 }
 
 @media (max-width: 860px) {
   .nav-wrap {
-    flex-wrap: wrap;
-    row-gap: 12px;
+    position: relative;
+    justify-content: space-between;
+    height: auto;
+    padding: 12px 16px;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
   }
 
   .nav {
-    position: static;
-    left: auto;
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    right: 0;
     transform: none;
-    order: 3;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
     width: 100%;
-    justify-content: center;
-    overflow-x: auto;
-    padding-bottom: 6px;
-    scrollbar-width: none;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0 10px;
+    background: rgba(6, 12, 26, 0.96);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.32);
+    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
+    pointer-events: none;
+    z-index: 99;
   }
 
-  .nav::-webkit-scrollbar {
-    display: none;
+  .nav-wrap.nav-open .nav {
+    max-height: 480px;
+    opacity: 1;
+    padding: 10px 10px 18px;
+    pointer-events: auto;
+  }
+
+  .nav a {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .nav a.active,
+  .nav a:hover {
+    background: rgba(56, 189, 248, 0.1);
+  }
+
+  .nav a.active::after {
+    content: none;
   }
 
   .hero {
@@ -2005,14 +2112,37 @@ h1 span.surname {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .projects-grid {
+  .projects-grid,
+  .projects-section .projects-grid:nth-of-type(2) {
     grid-template-columns: 1fr;
+  }
+
+  .experience-header h2 {
+    white-space: normal;
   }
 }
 
 @media (max-width: 640px) {
   .page {
     width: min(100% - 20px, 100%);
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .hero-copy,
+  .hero-visual,
+  .about-copy,
+  .stats-grid,
+  .experience-header,
+  .experience-grid,
+  .contact-info,
+  .contact-form,
+  .actions {
+    min-width: 0;
+  }
+
+  .contact-info-value {
+    overflow-wrap: anywhere;
   }
 
   .experience-section {
@@ -2021,14 +2151,6 @@ h1 span.surname {
 
   .nav-wrap {
     gap: 12px;
-  }
-
-  .nav {
-    gap: 16px;
-  }
-
-  .nav a {
-    white-space: nowrap;
   }
 
   .pill {
@@ -2146,7 +2268,8 @@ h1 span.surname {
     margin-top: 100px;
   }
 
-  .projects-grid {
+  .projects-grid,
+  .projects-section .projects-grid:nth-of-type(2) {
     grid-template-columns: 1fr;
   }
 
@@ -2650,4 +2773,176 @@ h1 span.surname {
 .cert-verified:focus{
     color:#3ca7f4 !important;
     text-decoration:none !important;
+}
+
+.cursor-dot{
+
+    position:fixed;
+
+    width:12px;
+    height:12px;
+
+    background:#00eaff;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    z-index:99999;
+
+    transform:translate(-50%,-50%);
+
+    box-shadow:
+    0 0 15px #00eaff,
+    0 0 40px #00eaff;
+
+}
+
+
+
+/* Large Aurora Glow */
+
+.cursor-glow{
+
+    position:fixed;
+
+    width:450px;
+    height:450px;
+
+
+    border-radius:50%;
+
+
+    pointer-events:none;
+
+
+    background:
+
+    radial-gradient(
+        circle,
+        rgba(0,238,255,.35),
+        rgba(139,92,246,.25),
+        transparent 70%
+    );
+
+
+    filter:blur(55px);
+
+
+    transform:translate(-50%,-50%);
+
+
+    z-index:2;
+
+
+    mix-blend-mode:screen;
+
+}
+
+
+
+/* Interactive Spotlight */
+
+.cursor-spotlight{
+
+    position:fixed;
+
+    inset:0;
+
+
+    pointer-events:none;
+
+
+    background:
+
+    radial-gradient(
+
+        450px circle at var(--x) var(--y),
+
+        rgba(0,238,255,.12),
+
+        transparent 45%
+
+    );
+
+
+    z-index:1;
+
+}
+
+
+
+/* Cursor Trail */
+
+.cursor-particle{
+
+    position:fixed;
+
+
+    width:10px;
+
+    height:10px;
+
+
+    border-radius:50%;
+
+
+    pointer-events:none;
+
+
+    background:#8b5cf6;
+
+
+    z-index:999;
+
+
+    animation:
+
+    cursorFade .8s forwards;
+
+
+    box-shadow:
+
+    0 0 20px #8b5cf6;
+
+}
+
+
+
+@keyframes cursorFade{
+
+
+    from{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+
+    to{
+
+        opacity:0;
+
+        transform:scale(0);
+
+    }
+
+}
+
+
+
+/* Card Magnetic Effect */
+
+.skill-card,
+.project-feature,
+.stat-card,
+.cert-card,
+.contact-info-card{
+
+    transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+
 }
