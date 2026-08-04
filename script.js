@@ -69,6 +69,49 @@ if (contactForm) {
   });
 }
 
+const navToggle = document.getElementById("navToggle");
+const navWrap = document.querySelector(".nav-wrap");
+const primaryNav = document.getElementById("primaryNav");
+
+function closeMobileNav() {
+  if (!navWrap) return;
+  navWrap.classList.remove("nav-open");
+  if (navToggle) navToggle.setAttribute("aria-expanded", "false");
+}
+
+function toggleMobileNav() {
+  if (!navWrap) return;
+  const isOpen = navWrap.classList.toggle("nav-open");
+  if (navToggle) navToggle.setAttribute("aria-expanded", String(isOpen));
+}
+
+if (navToggle && navWrap) {
+  navToggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleMobileNav();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!navWrap.classList.contains("nav-open")) return;
+    if (navWrap.contains(event.target)) return;
+    closeMobileNav();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMobileNav();
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 860) closeMobileNav();
+  });
+}
+
+if (primaryNav) {
+  primaryNav.addEventListener("click", (event) => {
+    if (event.target.tagName === "A") closeMobileNav();
+  });
+}
+
 const navLinks = document.querySelectorAll(".nav a[href^='#']");
 const sections = Array.from(navLinks)
   .map((link) => document.querySelector(link.getAttribute("href")))
@@ -101,4 +144,179 @@ if ("IntersectionObserver" in window && sections.length) {
   );
 
   sections.forEach((section) => observer.observe(section));
+}
+/* ==========================================
+   ADVANCED NEON CURSOR EFFECT
+========================================== */
+
+
+const cursorDot = document.querySelector(".cursor-dot");
+const cursorGlow = document.querySelector(".cursor-glow");
+const cursorSpotlight = document.querySelector(".cursor-spotlight");
+
+
+if(cursorDot && cursorGlow){
+
+
+let mouseX = 0;
+let mouseY = 0;
+
+let cursorX = 0;
+let cursorY = 0;
+
+
+
+document.addEventListener("mousemove",(e)=>{
+
+
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+
+    if(cursorSpotlight){
+
+        cursorSpotlight.style.setProperty(
+            "--x",
+            mouseX+"px"
+        );
+
+        cursorSpotlight.style.setProperty(
+            "--y",
+            mouseY+"px"
+        );
+
+    }
+
+
+
+    createCursorParticle(mouseX,mouseY);
+
+
+});
+
+
+
+
+
+function animateCursor(){
+
+
+    cursorX += (mouseX - cursorX) * 0.15;
+
+    cursorY += (mouseY - cursorY) * 0.15;
+
+
+
+    cursorDot.style.left = cursorX+"px";
+
+    cursorDot.style.top = cursorY+"px";
+
+
+
+    cursorGlow.style.left = cursorX+"px";
+
+    cursorGlow.style.top = cursorY+"px";
+
+
+
+    requestAnimationFrame(animateCursor);
+
+}
+
+
+animateCursor();
+
+
+
+
+
+function createCursorParticle(x,y){
+
+
+    const particle=document.createElement("span");
+
+
+    particle.className="cursor-particle";
+
+
+    particle.style.left=x+"px";
+
+    particle.style.top=y+"px";
+
+
+
+    document.body.appendChild(particle);
+
+
+
+    setTimeout(()=>{
+
+        particle.remove();
+
+    },800);
+
+
+}
+
+
+
+
+/* Magnetic Hover Effect */
+
+
+const magneticElements=document.querySelectorAll(
+".skill-card, .project-feature, .stat-card, .cert-card, .contact-info-card"
+);
+
+
+
+magneticElements.forEach(element=>{
+
+
+element.addEventListener("mousemove",(e)=>{
+
+
+const rect=element.getBoundingClientRect();
+
+
+const x=e.clientX - rect.left - rect.width/2;
+
+const y=e.clientY - rect.top - rect.height/2;
+
+
+
+element.style.transform=
+
+`
+translate(${x*0.08}px,${y*0.08}px)
+scale(1.03)
+`;
+
+
+
+cursorDot.style.transform=
+"translate(-50%,-50%) scale(2)";
+
+
+});
+
+
+
+
+element.addEventListener("mouseleave",()=>{
+
+
+element.style.transform="";
+
+
+cursorDot.style.transform=
+"translate(-50%,-50%) scale(1)";
+
+
+});
+
+
+});
+
+
 }
